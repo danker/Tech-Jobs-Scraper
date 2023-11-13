@@ -1,6 +1,7 @@
 import requests
 from furl import furl
 from bs4 import BeautifulSoup
+from gsheet_interface import GSheetIO
 
 # -------------------------------------
 class JobDetails:
@@ -83,10 +84,14 @@ for s in scraper.scrapers:
     jobs.extend(s.getJobs())
 
 print(f"--DONE SCRAPING--")
+print(f"--WRITING TO GSHEET--")
+gsio = GSheetIO()
 
-for job in jobs:
-    print(f"<-- {job.title} -->")
-    print(f"LOCATION-> {job.location}")
-    print(f"URL-> {job.url}")
+gsio.writeJobs(jobs)
+
+#for job in jobs:
+#    print(f"<-- {job.title} -->")
+#    print(f"LOCATION-> {job.location}")
+#    print(f"URL-> {job.url}")
 
 print(f"--PROCESSED {len(jobs)} JOBS--")
