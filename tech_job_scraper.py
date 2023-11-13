@@ -74,6 +74,8 @@ class RiotGamesJobScraper(JobScraper):
 
 
 # -------------------------------------
+# MAIN
+# -------------------------------------
 scraper = JobScraper()
 
 jobs = []
