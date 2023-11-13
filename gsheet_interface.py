@@ -15,10 +15,10 @@ class GSheetIO:
         #Get the data from the Sheet into python as DF
         jobs_df = wks.get_as_df()
 
-        #Print the head of the datframe
+        #Print whatever was currently in the sheet to STDOUT
         print(jobs_df)
 
-        #In order to clear all the data in the sheet.
+        #clear everything out of the gsheet
         wks.clear()
 
         jobs_list = []
