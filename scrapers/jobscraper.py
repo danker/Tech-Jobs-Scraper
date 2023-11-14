@@ -1,18 +1,12 @@
 import requests
 from furl import furl
 from bs4 import BeautifulSoup
-from gsheet_interface import GSheetIO
 
-# -------------------------------------
-class JobDetails:
-    def __init__(self, title, url, location):
-        self.title = title
-        self.url = url
-        self.location = location
+from jobdetails import JobDetails
 
-# -------------------------------------
 class JobScraper:
     def __init__(self):
+        # initialize all scrapers
         self.scrapers = []
 
         rgScraper = RiotGamesJobScraper()
@@ -29,7 +23,7 @@ class JobScraper:
             jobs.append(job_details)
 
         return jobs
-    
+
 class RiotGamesJobScraper(JobScraper):
     def __init__(self):
         self.base_url = "https://www.riotgames.com/en/work-with-us"
@@ -46,6 +40,8 @@ class RiotGamesJobScraper(JobScraper):
         else:
             print(f"Failed to retrieve the page. Status code: {self.response.status_code}")
 
+    # -------------------------------------
+    # extract the details for a specific job
     # -------------------------------------
     def getJobDetails(self, job_element):
             
@@ -71,29 +67,3 @@ class RiotGamesJobScraper(JobScraper):
             job_url_full = self.base_url + job_url
 
         return JobDetails(job_title, job_url_full, job_location)
-
-
-# -------------------------------------
-# MAIN
-# -------------------------------------
-scraper = JobScraper()
-
-jobs = []
-
-print(f"---STARTING---")
-
-for s in scraper.scrapers: 
-    jobs.extend(s.getJobs())
-
-print(f"--DONE SCRAPING--")
-print(f"--WRITING TO GSHEET--")
-gsio = GSheetIO()
-
-gsio.writeJobs(jobs)
-
-#for job in jobs:
-#    print(f"<-- {job.title} -->")
-#    print(f"LOCATION-> {job.location}")
-#    print(f"URL-> {job.url}")
-
-print(f"--PROCESSED {len(jobs)} JOBS--")
