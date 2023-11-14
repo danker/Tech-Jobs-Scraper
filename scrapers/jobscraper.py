@@ -13,6 +13,7 @@ class JobScraper:
 
         self.scrapers.append(rgScraper)
 
+    # get all the jobs from this particular instance of a scraper
     def getJobs(self):
 
         jobs = []
@@ -23,22 +24,28 @@ class JobScraper:
             jobs.append(job_details)
 
         return jobs
+    
+    # pass in the response, return a bs4 representation of the page
+    def getJobsPage(self, response):
 
+        soup = None
+
+        # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            # Parse the HTML content of the page
+            soup = BeautifulSoup(response.text, 'html.parser')     
+        else:
+            print(f"Failed to retrieve the page. Status code: {response.status_code}")
+
+        return soup
+
+#### --------------------------------------------------------------------------
 class RiotGamesJobScraper(JobScraper):
     def __init__(self):
         self.base_url = "https://www.riotgames.com/en/work-with-us"
         self.response = requests.get(self.base_url)
-        self.job_elements = ""
-
-        # Check if the request was successful (status code 200)
-        if self.response.status_code == 200:
-            # Parse the HTML content of the page
-            soup = BeautifulSoup(self.response.text, 'html.parser')
-
-            # Find elements with class "job-row job-row--body"
-            self.job_elements = soup.find_all(class_="job-row job-row--body")       
-        else:
-            print(f"Failed to retrieve the page. Status code: {self.response.status_code}")
+        self.bs4 = self.getJobsPage(self.response)
+        self.job_elements = self.bs4.find_all(class_="job-row job-row--body")
 
     # -------------------------------------
     # extract the details for a specific job
