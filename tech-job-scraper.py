@@ -18,7 +18,7 @@ print(f"--DONE SCRAPING--")
 print(f"--WRITING TO GSHEET--")
 #gsio = GSheetIO()
 #gsio.writeJobs(jobs)
-
+   
 for job in jobs:
     print(f"<-- {job.title} -->")
     print(f"LOCATION-> {job.location}")
